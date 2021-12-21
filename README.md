@@ -1,7 +1,25 @@
 git init  
 npm init  
 npm install --save-dev hardhat  
-npx hardhat
+npx hardhat // Select Advanced ts project  
+cp .env.example .env
+// Update .env file  
+npx hardhat accounts --network ropsten  
+// or set the default network as ropsten then  
+npx hardhat accounts  
+
+// Hardhat shorthand `hh`
+sudo npm i -g hardhat-shorthand  
+// Try `hh accounts` (same as `npx hardhat accounts`)  
+
+// Install dependencies  
+npm install @truffle/hdwallet-provider  
+npm install --save-dev @openzeppelin/contracts  
+npm install --save-dev @nomiclabs/hardhat-web3 web3
+
+// Update/Add your contract code  
+// Update scripts/deploy.ts  
+hh run scripts/deploy.ts  
 
 # Advanced Sample Hardhat Project
 
