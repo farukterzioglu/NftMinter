@@ -15,7 +15,7 @@ async function main() {
 
   // We get the contract to deploy
   const MyNft = await ethers.getContractFactory("MyNft");
-  const myNft = await MyNft.deploy("MyNft", "MN");
+  const myNft = await MyNft.deploy("MyNft", "MN", "");
 
   await myNft.deployed();
 

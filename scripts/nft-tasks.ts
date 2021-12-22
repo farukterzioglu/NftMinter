@@ -14,20 +14,54 @@ const callback = function (err: any, res: any) {
 
 const contractName = "MyNft";
 
-// hh DeployNft --name Nft123 --symbol N123
+// hh DeployNft --name MyNft --symbol MyN --baseuri http://ipfs/
 task("DeployNft", "")
 	.addParam("name", "Name of the Nft")
 	.addParam("symbol", "Symbol of the Nft")
+	.addParam("baseuri", "Base URI")
 	.setAction(async (taskArgs, hre) => {
-        console.log(`Nft '${taskArgs.name}' is being deployed...`);
-
         const contract = await hre.ethers.getContractFactory(contractName);
-        const deployed = await contract.deploy(taskArgs.name, taskArgs.symbol);
+        const deployed = await contract.deploy(taskArgs.name, taskArgs.symbol, taskArgs.baseuri);
 
         await deployed.deployed();
 
-        console.log("Nft deployed to:", deployed.address);
+        console.log(deployed.address);
     });
+
+
+task("DeployAndSafeMint", "")
+.setAction(async (taskArgs, hre) => {
+    const Contract = await hre.ethers.getContractFactory("MyNft");
+    const contract = await Contract.deploy("MyNft", "MyN", "http://ipfs/");
+    await contract.deployed();
+    console.log("Nft deployed to:", contract.address);
+
+    const tokenId = 1;
+    // const mintTx = await contract.safeMint("0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f", tokenId);
+    // await mintTx.wait();
+
+    const tokenUri = await contract.tokenURI(tokenId);
+    console.log({ tokenUri: tokenUri});
+  });
+
+// hh SafeMint --contract 0xFd73B36b4A5600Fd1bC73c47d35e179086446B7e
+task("SafeMint", "")
+  .addParam("contract", "Hash of the Nft")
+  .setAction(async (taskArgs, hre) => {
+      const Contract = await hre.ethers.getContractFactory("MyNft");
+
+      const contract = Contract.attach(taskArgs.contract);
+
+      const totalSupply = await contract.totalSupply();
+      const tokenId = totalSupply.add(1);
+      // const mintTx = await contract.safeMint("0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f", tokenId);
+
+      // await mintTx.wait();
+  
+      const tokenUri = await contract.tokenURI(tokenId);
+      console.log({ tokenUri: tokenUri});
+    });
+
 
 // hh MintNft --contract 0xDe709C78d323e3A28EECc92f3C1B8FeAA9Bf8Ddc --recipient 0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f --tokenuri .
 task("MintNft", "")

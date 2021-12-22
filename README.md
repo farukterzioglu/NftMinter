@@ -8,18 +8,24 @@ npx hardhat accounts --network ropsten
 // or set the default network as ropsten then  
 npx hardhat accounts  
 
-// Hardhat shorthand `hh`
+// Hardhat shorthand `hh`  
 sudo npm i -g hardhat-shorthand  
 // Try `hh accounts` (same as `npx hardhat accounts`)  
 
 // Install dependencies  
 npm install @truffle/hdwallet-provider  
 npm install --save-dev @openzeppelin/contracts  
-npm install --save-dev @nomiclabs/hardhat-web3 web3
+npm install --save-dev @nomiclabs/hardhat-web3 web3  
 
 // Update/Add your contract code  
 // Update scripts/deploy.ts  
 hh run scripts/deploy.ts  
+
+// Deploy via task  
+export CONTRACT_HASH=$(hh DeployNft --name MyNft --symbol MyN --baseuri http://ipfs/)  
+
+// Run tests over deployed contract  (uses contract hash at CONTRACT_HASH)  
+hh test
 
 # Advanced Sample Hardhat Project
 
