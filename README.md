@@ -22,9 +22,10 @@ npm install --save-dev @nomiclabs/hardhat-web3 web3
 hh run scripts/deploy.ts  
 
 // Deploy via task  
+hh compile  
 export CONTRACT_HASH=$(hh DeployNft --name MyNft --symbol MyN --baseuri http://ipfs/)  
 
-// Run tests over deployed contract  (uses contract hash at CONTRACT_HASH)  
+// Run tests over deployed contract (uses contract hash at CONTRACT_HASH)  
 hh test
 
 # Advanced Sample Hardhat Project

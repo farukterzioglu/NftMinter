@@ -1,5 +1,19 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { MyNft } from "../typechain";
+
+let contract: MyNft;
+
+before(async () => {  
+  expect(process.env.CONTRACT_HASH, "env.CONTRACT_HASH is not set").to.not.be.undefined;
+
+  const Contract = await ethers.getContractFactory("MyNft");
+  contract = Contract.attach(process.env.CONTRACT_HASH?.toString()!);
+
+  // Set to the default since some tests modifies it
+  const setBaseURITx = await contract.setBaseURI("http://ipfs/");
+  await setBaseURITx.wait();
+})
 
 describe("MyNft", function () {
   xit("Should deploy & return the URI when not set", async function () {
@@ -17,11 +31,6 @@ describe("MyNft", function () {
   }).timeout(60000);
 
   it("Should return the URI when not set", async function () {
-    expect(process.env.CONTRACT_HASH, "env.CONTRACT_HASH is not set").to.not.be.undefined;
-
-    const Contract = await ethers.getContractFactory("MyNft");
-    const contract = Contract.attach(process.env.CONTRACT_HASH?.toString()!);
-
     const totalSupply = await contract.totalSupply();
     const tokenId = totalSupply.add(1);
     const mintTx = await contract.safeMint("0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f", tokenId);
@@ -33,18 +42,49 @@ describe("MyNft", function () {
   }).timeout(60000);
 
   it("Should return the URI when set", async function () {
-    expect(process.env.CONTRACT_HASH, "env.CONTRACT_HASH is not set").to.not.be.undefined
-
-    const Contract = await ethers.getContractFactory("MyNft");
-    const contract = Contract.attach(process.env.CONTRACT_HASH?.toString()!);
-
     const totalSupply = await contract.totalSupply();
     const tokenId = totalSupply.add(1);
-    const mintTx = await contract.safeMintWithUri("0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f", tokenId, `subpath/${tokenId}`);
+    const mintTx = await contract.safeMintWithUri("0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f", tokenId, `subpath/123-${tokenId}`);
     await mintTx.wait();
 
     const tokenUri = await contract.tokenURI(tokenId);
 
-    expect(tokenUri).to.equal(`http://ipfs/subpath/${tokenId}`);
+    expect(tokenUri).to.equal(`http://ipfs/subpath/123-${tokenId}`);
+  }).timeout(60000);
+
+  it("Should return the URI when baseURI updated", async function () {
+    const currentBaseURI = await contract.getBaseURI();
+    
+    if(currentBaseURI != "https://gateway.pinata.cloud/ipfs/") {
+      const setBaseURITx = await contract.setBaseURI("https://gateway.pinata.cloud/ipfs/");
+      await setBaseURITx.wait();
+    }
+
+    const totalSupply = await contract.totalSupply();
+    const tokenId = totalSupply.add(1);
+    const mintTx = await contract.safeMint("0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f", tokenId);
+    await mintTx.wait();
+
+    const tokenUri = await contract.tokenURI(tokenId);
+
+    expect(tokenUri).to.equal(`https://gateway.pinata.cloud/ipfs/${tokenId}`);
+  }).timeout(60000);
+
+  it("Should return the URI when baseURI updated and when using custom token uri", async function () {
+    const currentBaseURI = await contract.getBaseURI();
+
+    if(currentBaseURI != "https://gateway.pinata.cloud/ipfs/") {
+      const setBaseURITx = await contract.setBaseURI("https://gateway.pinata.cloud/ipfs/");
+      await setBaseURITx.wait();
+    }
+
+    const totalSupply = await contract.totalSupply();
+    const tokenId = totalSupply.add(1);
+    const mintTx = await contract.safeMintWithUri("0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f", tokenId, `subpath/123-${tokenId}`);
+    await mintTx.wait();
+
+    const tokenUri = await contract.tokenURI(tokenId);
+
+    expect(tokenUri).to.equal(`https://gateway.pinata.cloud/ipfs/subpath/123-${tokenId}`);
   }).timeout(60000);
 });

@@ -23,6 +23,10 @@ contract MyNft is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable 
         _baseUri = uri;
     }
 
+    function getBaseURI() public view returns (string memory) {
+        return _baseUri;
+    }
+
     // Pausable 
     function pause() public onlyOwner {
         _pause();

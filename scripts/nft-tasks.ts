@@ -37,8 +37,8 @@ task("DeployAndSafeMint", "")
     console.log("Nft deployed to:", contract.address);
 
     const tokenId = 1;
-    // const mintTx = await contract.safeMint("0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f", tokenId);
-    // await mintTx.wait();
+    const mintTx = await contract.safeMint("0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f", tokenId);
+    await mintTx.wait();
 
     const tokenUri = await contract.tokenURI(tokenId);
     console.log({ tokenUri: tokenUri});
@@ -54,9 +54,9 @@ task("SafeMint", "")
 
       const totalSupply = await contract.totalSupply();
       const tokenId = totalSupply.add(1);
-      // const mintTx = await contract.safeMint("0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f", tokenId);
+      const mintTx = await contract.safeMint("0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f", tokenId);
 
-      // await mintTx.wait();
+      await mintTx.wait();
   
       const tokenUri = await contract.tokenURI(tokenId);
       console.log({ tokenUri: tokenUri});
