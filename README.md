@@ -28,6 +28,29 @@ export CONTRACT_HASH=$(hh DeployNft --name MyNft --symbol MyN --baseuri http://i
 // Run tests over deployed contract (uses contract hash at CONTRACT_HASH)  
 hh test
 
+
+
+https://docs.avax.network/build/tutorials/smart-contracts/using-hardhat-with-the-avalanche-c-chain  
+
+
+// Deploy to Avalanche  
+```
+hh DeployNft --name Faces --symbol FCS --baseuri https://ipfs.io/ipfs/QmXpnzx5nStjNHZ3YR3dJhmoYjtHcSnkvc9TxxbL5kpcjn --network avalanche
+export CONTRACT_HASH=0xDD80b8F3313BCA1177C22138de895D904c792Dd0
+hh SafeMintWithUri --contract ${CONTRACT_HASH} --uri faruk.png  --network avalanche
+```
+
+
+Base url  
+https://ipfs.io/ipfs/QmXpnzx5nStjNHZ3YR3dJhmoYjtHcSnkvc9TxxbL5kpcjn  
+
+Sub files  
+https://ipfs.io/ipfs/QmXpnzx5nStjNHZ3YR3dJhmoYjtHcSnkvc9TxxbL5kpcjn/faruk.png  
+https://ipfs.io/ipfs/QmXpnzx5nStjNHZ3YR3dJhmoYjtHcSnkvc9TxxbL5kpcjn/turgut.png  
+
+
+
+# Default project readme  
 # Advanced Sample Hardhat Project
 
 This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.

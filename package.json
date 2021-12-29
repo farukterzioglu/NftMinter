@@ -44,6 +44,7 @@
     "web3": "^1.5.3"
   },
   "dependencies": {
-    "@truffle/hdwallet-provider": "^2.0.0"
+    "@truffle/hdwallet-provider": "^2.0.0",
+    "ipfs-http-client": "^55.0.0"
   }
 }

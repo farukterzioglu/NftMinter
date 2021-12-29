@@ -63,6 +63,26 @@ task("SafeMint", "")
     });
 
 
+// hh SafeMintWithUri --contract ${CONTRACT_HASH} --uri faruk.png  --network avalanche
+task("SafeMintWithUri", "")
+  .addParam("contract", "Hash of the Nft")
+  .addParam("uri", "URI")
+  .setAction(async (taskArgs, hre) => {
+      const Contract = await hre.ethers.getContractFactory("MyNft");
+
+      const contract = Contract.attach(taskArgs.contract);
+
+      const totalSupply = await contract.totalSupply();
+      const tokenId = totalSupply.add(1);
+      const mintTx = await contract.safeMintWithUri("0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f", tokenId, taskArgs.uri);
+
+      await mintTx.wait();
+  
+      const tokenUri = await contract.tokenURI(tokenId);
+      console.log({ tokenUri: tokenUri});
+    });
+
+
 // hh MintNft --contract 0xDe709C78d323e3A28EECc92f3C1B8FeAA9Bf8Ddc --recipient 0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f --tokenuri .
 task("MintNft", "")
 	.addParam("contract", "Hash of the Nft")
