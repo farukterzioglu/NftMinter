@@ -6,6 +6,8 @@ import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
+import '@typechain/hardhat'
+import '@nomiclabs/hardhat-ethers'
 
 import "./scripts/nft-tasks"
 
@@ -45,6 +47,10 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
+  },
+  typechain: {
+    outDir: 'typechain',
+    target: 'ethers-v5'
   },
 };
 

@@ -16,6 +16,8 @@ sudo npm i -g hardhat-shorthand
 npm install @truffle/hdwallet-provider  
 npm install --save-dev @openzeppelin/contracts  
 npm install --save-dev @nomiclabs/hardhat-web3 web3  
+npm install --save-dev typechain @typechain/hardhat @typechain/ethers-v5 // https://github.com/dethcrypto/TypeChain/tree/master/packages/hardhat#installation
+
 
 // Update/Add your contract code  
 // Update scripts/deploy.ts  
@@ -28,11 +30,6 @@ export CONTRACT_HASH=$(hh DeployNft --name MyNft --symbol MyN --baseuri http://i
 // Run tests over deployed contract (uses contract hash at CONTRACT_HASH)  
 hh test
 
-
-
-https://docs.avax.network/build/tutorials/smart-contracts/using-hardhat-with-the-avalanche-c-chain  
-
-
 // Deploy to Avalanche  
 ```
 hh DeployNft --name Faces --symbol FCS --baseuri https://ipfs.io/ipfs/QmXpnzx5nStjNHZ3YR3dJhmoYjtHcSnkvc9TxxbL5kpcjn --network avalanche
@@ -40,7 +37,23 @@ export CONTRACT_HASH=0xDD80b8F3313BCA1177C22138de895D904c792Dd0
 hh SafeMintWithUri --contract ${CONTRACT_HASH} --uri faruk.png  --network avalanche
 ```
 
+// Token tests  
+// Deploy and run test  
+`hh test`
 
+// Run tests on deployed contract  
+```
+export TOKEN_HASH=0x6eB8398f2fADAE9BBcb0016A4c51c62db44926Ea
+hh test
+```
+or as single line   
+`TOKEN_HASH=0x6eB8398f2fADAE9BBcb0016A4c51c62db44926Ea hh test`  
+
+// Run tests on Hardhat network  
+`hh test --network hardhat`  
+
+
+// IPFS parameters  
 Base url  
 https://ipfs.io/ipfs/QmXpnzx5nStjNHZ3YR3dJhmoYjtHcSnkvc9TxxbL5kpcjn  
 
@@ -48,6 +61,9 @@ Sub files
 https://ipfs.io/ipfs/QmXpnzx5nStjNHZ3YR3dJhmoYjtHcSnkvc9TxxbL5kpcjn/faruk.png  
 https://ipfs.io/ipfs/QmXpnzx5nStjNHZ3YR3dJhmoYjtHcSnkvc9TxxbL5kpcjn/turgut.png  
 
+
+Notes  
+https://docs.avax.network/build/tutorials/smart-contracts/using-hardhat-with-the-avalanche-c-chain  
 
 
 # Default project readme  
