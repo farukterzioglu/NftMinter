@@ -19,7 +19,7 @@ describe("MyToken Tests", function(){
     
         if(process.env.TOKEN_HASH != null) 
         {
-            contract = contractFac.attach("0x6eB8398f2fADAE9BBcb0016A4c51c62db44926Ea");
+            contract = contractFac.attach(process.env.TOKEN_HASH.toString()!);
             console.log(`Attached to the contact at ${process.env.TOKEN_HASH}`);
     
             const totalSupply = await contract.totalSupply();

@@ -52,6 +52,8 @@ or as single line
 // Run tests on Hardhat network  
 `hh test --network hardhat`  
 
+// Run the token sample 
+`hh run scripts/token-transfer.ts`  
 
 // IPFS parameters  
 Base url  
