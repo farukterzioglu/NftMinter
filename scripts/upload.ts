@@ -1,8 +1,33 @@
 import * as fs from 'fs';
-import { create, Options } from 'ipfs-http-client';
+import { strictEqual } from 'assert';
+import { CID, create, globSource, Options } from 'ipfs-http-client';
 
-const client = create( { url: "https://ipfs.infura.io:5001/api/v0"} )
+const globSourceOptions = {
+  hidden: false
+};
 
+const auth = 'Basic ' + Buffer.from(process.env.IPFS_PROJECTID + ':' + process.env.IPFS_SECRET).toString('base64')
+const client = create( { 
+  url: "https://ipfs.infura.io:5001/api/v0",
+  headers: {
+    authorization: auth
+  }
+})
+
+async function uploadFolderToIpfs(folderPath :string) : Promise<string> {
+  const addOptions = {
+    pin: true,
+    wrapWithDirectory: true,
+    timeout: 60000
+  };
+
+  let cid: CID;
+  for await (const file of client.addAll(globSource(folderPath, "**/*", globSourceOptions), addOptions)) {
+    cid = file.cid;
+  }
+
+  return cid!.toString();
+}
 async function uploadImageToIpfs(filePath :string) : Promise<string> {
   const file = fs.readFileSync(filePath);
 
@@ -24,8 +49,11 @@ async function uploadMetadataToIpfs(imagePath:string, name:string, desc:string) 
   return metadataUrl;
 }
 
-// TODO: Upload to the base url
 async function uploadNftImages(nftImagesPath: string, baseUrl: string) : Promise<string[]> {
+  const uploadedPathCID = await uploadFolderToIpfs(`${nftImagesPath}`);
+
+  return [];
+
   // Read images
   const ntfImageList = new Array<string>();
   fs.readdirSync(nftImagesPath).forEach(file => {
