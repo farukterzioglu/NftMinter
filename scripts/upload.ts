@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import { strictEqual } from 'assert';
 import { CID, create, globSource, Options } from 'ipfs-http-client';
 import { string } from 'hardhat/internal/core/params/argumentTypes';
+import { ethers } from "hardhat";
 
 const globSourceOptions = {
   hidden: false
@@ -47,15 +48,15 @@ async function uploadFolderToIpfs(folderPath :string) : Promise<UploadDetails> {
 
 class Metadata 
 {
-  imagePath:string;
+  image:string;
   name:string; 
-  desc:string;
+  description:string;
 
   constructor(imagePath:string, name:string, desc:string)
   {
-    this.imagePath = imagePath;
+    this.image = imagePath;
     this.name = name;
-    this.desc = desc;
+    this.description = desc;
   }
 }
 
@@ -90,6 +91,7 @@ async function uploadMetadataListToIpfs(metadataList : Metadata[]) : Promise<Met
     timeout: 60000
   };
 
+  // TODO: Upload with file name (e.g. `baseuri/1.json` )
   const metadataUploadDetails = new MetadataUploadDetails();
   let i: number = 0;
   for await (const file of client.addAll(jsonList, addOptions)) {
@@ -169,9 +171,19 @@ async function main() {
     console.log(`${fileNameMetadataPair.fileName} \t ${fileNameMetadataPair.metaDataUri}`); 
   });
 
-  
-  // TODO: Create NFT and mint for the list
+  const GenericNft = await ethers.getContractFactory("GenericNft");
+  const genericNft = await GenericNft.deploy("MatrixPosters", "MTRX", "");
+  await genericNft.deployed();
 
+  console.log(`Nft deployed to: ${genericNft.address}`);
+
+  const [owner] = await ethers.getSigners();
+  for (let i = 0; i < fileNameMetadataPairs.length; i++) {
+    const element = fileNameMetadataPairs[i];
+    
+    const mintTx = await genericNft.safeMintWithUri(owner.address, i, element.metaDataUri);
+    console.log(`Minted ${element.fileName} at tx ${mintTx.hash}`);
+  }
 }
 
 // We recommend this pattern to be able to use async/await everywhere
