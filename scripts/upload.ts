@@ -35,12 +35,81 @@ async function uploadFolderToIpfs(folderPath :string) : Promise<UploadDetails> {
   };
 
   for await (const file of client.addAll(globSource(folderPath, "**/*", globSourceOptions), addOptions)) {
+    console.log( {image: file});
     uploadDetails.FileNames.push(file.path);
     uploadDetails.FolderCid = file.cid.toString();
   }   
   uploadDetails.FileNames.splice(uploadDetails.FileNames.length -1);
 
+  console.log( {uploadedImages: uploadDetails});
   return uploadDetails;
+}
+
+class Metadata 
+{
+  imagePath:string;
+  name:string; 
+  desc:string;
+
+  constructor(imagePath:string, name:string, desc:string)
+  {
+    this.imagePath = imagePath;
+    this.name = name;
+    this.desc = desc;
+  }
+}
+
+class MetadataPair {
+  CID : string;
+  Path : string;
+
+  constructor(cid: string, path: string) {
+    this.CID = cid;
+    this.Path = path;
+  }
+}
+class MetadataUploadDetails
+{
+  FolderCid : string;
+  MetadataFileNameUriPairs: MetadataPair[];
+
+  constructor(){
+    this.MetadataFileNameUriPairs = new Array<MetadataPair>();
+    this.FolderCid = "";
+  }
+}
+
+async function uploadMetadataListToIpfs(metadataList : Metadata[]) : Promise<MetadataUploadDetails> {
+  console.log( { metadataList: metadataList });
+  let jsonList : Array<string> = metadataList.map( metadata => JSON.stringify(metadata));
+  console.log( { metadataJsonList: jsonList} );
+
+  const addOptions = {
+    pin: true,
+    wrapWithDirectory: true,
+    timeout: 60000
+  };
+
+  const metadataUploadDetails = new MetadataUploadDetails();
+  let i: number = 0;
+  for await (const file of client.addAll(jsonList, addOptions)) {
+    // Last item is the folder CID
+    if(i == (metadataList.length) )
+    {
+      metadataUploadDetails.FolderCid = file.cid.toString();
+    }
+    else 
+    {
+      const pair = new MetadataPair(file.cid.toString(), file.path);
+      console.log(pair);
+      metadataUploadDetails.MetadataFileNameUriPairs.push(pair);
+      i++;
+    }
+  }   
+  // metadataUploadDetails.MetadataFileNameUriPairs.splice(metadataUploadDetails.MetadataFileNameUriPairs.length -1);
+  console.log({metadataUploadDetails:metadataUploadDetails});
+
+  return metadataUploadDetails;
 }
 
 async function uploadMetadataToIpfs(imagePath:string, name:string, desc:string) : Promise<string> {
@@ -68,16 +137,26 @@ class FileNameMetadataPair
 
 }
 async function uploadNftImages(nftImagesPath: string, baseUrl: string) : Promise<FileNameMetadataPair[]> {
-  const fileNameMetadataPairs = new Array<FileNameMetadataPair>();
+  // Upload all images under a folder 
+  const uploadDetails :UploadDetails = await uploadFolderToIpfs(`${nftImagesPath}`);
 
-  const uploadDetails = await uploadFolderToIpfs(`${nftImagesPath}`);
-  for (let i = 0; i < uploadDetails.FileNames.length; i++) {
-    const filename = uploadDetails.FileNames[i];
-    const fileUri = `https://ipfs.infura.io/ipfs/${uploadDetails.FolderCid}/${filename}`;
-    
-    const uri = await uploadMetadataToIpfs(fileUri, filename, filename);
-    fileNameMetadataPairs.push(new FileNameMetadataPair(filename, uri));
+  // Create metadata for uploaded images
+  let metadaList : Array<Metadata> = uploadDetails.FileNames.map( fn => 
+    new Metadata(`https://ipfs.infura.io/ipfs/${uploadDetails.FolderCid}/${fn}`, fn, `A ${fn} NFT`));
+
+  // Upload metadata list to a IPFS folder
+  const metadataUploadDetails: MetadataUploadDetails = await uploadMetadataListToIpfs(metadaList);
+
+  // Create filename-metadataUri pairs
+  const fileNameMetadataPairs = new Array<FileNameMetadataPair>();
+  for (let i = 0; i < metadataUploadDetails.MetadataFileNameUriPairs.length; i++) {
+    const fileNameUriPair = metadataUploadDetails.MetadataFileNameUriPairs[i];
+    const fileUri = `https://ipfs.infura.io/ipfs/${metadataUploadDetails.FolderCid}/${fileNameUriPair.CID}`;
+
+    fileNameMetadataPairs.push(new FileNameMetadataPair(uploadDetails.FileNames[i], fileUri));
   }
+  console.log({fileNameMetadataPairs: fileNameMetadataPairs});
+
   return fileNameMetadataPairs;
 }
 
@@ -90,6 +169,7 @@ async function main() {
     console.log(`${fileNameMetadataPair.fileName} \t ${fileNameMetadataPair.metaDataUri}`); 
   });
 
+  
   // TODO: Create NFT and mint for the list
 
 }
