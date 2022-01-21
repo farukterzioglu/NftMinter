@@ -105,12 +105,14 @@ class FileNameMetadataPair
 {
   fileName :string;
   metaDataUri: string;
-  metaDataPublicUri: string;
+  metaDataIpfsUri: string;
+  metaDataGatewayURL: string;
 
-  constructor(fileName :string,metaDataUri: string, metaDataPublicUri: string = ""){
+  constructor(fileName :string, metaDataUri: string, metaDataIpfsUri: string, metaDataPublicUri: string = ""){
     this.fileName = fileName;
     this.metaDataUri = metaDataUri;
-    this.metaDataPublicUri = metaDataPublicUri;
+    this.metaDataIpfsUri = metaDataIpfsUri;
+    this.metaDataGatewayURL = metaDataPublicUri;
   }
 
 }
@@ -129,13 +131,16 @@ async function uploadNftImages(nftImagesPath: string, baseUrl: string) : Promise
   const fileNameMetadataPairs = new Array<FileNameMetadataPair>();
   for (let i = 0; i < metadataUploadDetails.FileNames.length; i++) {
     const fileName = metadataUploadDetails.FileNames[i];
-    // const metaDataUri = `https://ipfs.infura.io/ipfs/${metadataUploadDetails.FolderCid}/${fileNameUriPair}`;
-    const metaDataUri = `ipfs://${metadataUploadDetails.FolderCid}/${fileName}`;
+    const metaDataUri = `${metadataUploadDetails.FolderCid}/${fileName}`;
 
-    remoteClient.pin.add(`${metadataUploadDetails.FolderCid}/${fileName}`);
-    const publicUri = `https://ipfs.infura.io/ipfs/${metadataUploadDetails.FolderCid}/${fileName}`;
+    remoteClient.pin.add(metaDataUri); // no need to wait
 
-    fileNameMetadataPairs.push(new FileNameMetadataPair(uploadDetails.FileNames[i], metaDataUri, publicUri));
+    fileNameMetadataPairs.push(new FileNameMetadataPair(
+      uploadDetails.FileNames[i], 
+      metaDataUri,
+      `ipfs://${metaDataUri}`, 
+      `https://ipfs.infura.io/ipfs/${metaDataUri}`
+    ));
   }
   console.log({fileNameMetadataPairs: fileNameMetadataPairs});
   return fileNameMetadataPairs;
@@ -149,7 +154,7 @@ async function main() {
   // fileNameMetadataPairs.forEach(fileNameMetadataPair => { console.log(`${fileNameMetadataPair.fileName} \t ${fileNameMetadataPair.metaDataUri}`); });
 
   const GenericNft = await ethers.getContractFactory("GenericNft");
-  const genericNft = await GenericNft.deploy("MatrixPosters", "MTRX", "");
+  const genericNft = await GenericNft.deploy("MatrixPosters", "MTRX", "ipfs://");
   await genericNft.deployed();
 
   console.log(`Nft deployed to: ${genericNft.address}`);
