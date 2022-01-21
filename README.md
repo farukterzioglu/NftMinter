@@ -67,6 +67,10 @@ https://ipfs.io/ipfs/QmXpnzx5nStjNHZ3YR3dJhmoYjtHcSnkvc9TxxbL5kpcjn/turgut.png
 Notes  
 https://docs.avax.network/build/tutorials/smart-contracts/using-hardhat-with-the-avalanche-c-chain  
 
+IPFS Notes  
+https://docs.ipfs.io/how-to/mint-nfts-with-ipfs/#next-steps  
+https://docs.ipfs.io/how-to/best-practices-for-nft-data/#types-of-ipfs-links-and-when-to-use-them  
+https://github.com/yusefnapora/minty  
 
 # Default project readme  
 # Advanced Sample Hardhat Project

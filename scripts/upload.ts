@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { strictEqual } from 'assert';
 import { CID, create, globSource, Options } from 'ipfs-http-client';
+import { AddOptions, AddAllOptions } from 'ipfs-core-types/src/root';
 import { string } from 'hardhat/internal/core/params/argumentTypes';
 import { ethers } from "hardhat";
 
@@ -26,14 +27,17 @@ class FileUploadResponse
     this.FolderCid = "";
   }
 }
-async function uploadFolderToIpfs(folderPath :string) : Promise<FileUploadResponse> {
-  const addOptions = {
-    pin: true,
-    wrapWithDirectory: true,
-    timeout: 60000
-  };
-  const globSourceOptions = { hidden: false };
 
+const addOptions : AddAllOptions = {
+  pin: true,
+  wrapWithDirectory: true,
+  timeout: 60000,
+  cidVersion: 1,
+  hashAlg: 'sha2-256'
+};
+const globSourceOptions = { hidden: false };
+
+async function uploadFolderToIpfs(folderPath :string) : Promise<FileUploadResponse> {
   const uploadDetails = new FileUploadResponse();
   for await (const file of ipfsClient.addAll(globSource(folderPath, "**/*", globSourceOptions), addOptions)) {
     console.log( {image: file});
@@ -74,12 +78,6 @@ class MetadataUploadResponse
 async function uploadMetadataListToIpfs(metadataList : Metadata[]) : Promise<MetadataUploadResponse> {
   console.log( { metadataList: metadataList });
   let jsonList : Array<string> = metadataList.map( metadata => JSON.stringify(metadata));
-
-  const addOptions = {
-    pin: true,
-    wrapWithDirectory: true,
-    timeout: 60000
-  };
 
   // TODO: Upload with file name (e.g. `baseuri/1.json` )
   const metadataUploadResponse = new MetadataUploadResponse();
