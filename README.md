@@ -72,6 +72,14 @@ https://docs.ipfs.io/how-to/mint-nfts-with-ipfs/#next-steps
 https://docs.ipfs.io/how-to/best-practices-for-nft-data/#types-of-ipfs-links-and-when-to-use-them  
 https://github.com/yusefnapora/minty  
 
+// Repost gas usage 
+npm install hardhat-gas-reporter --save-dev  
+// add to congif
+REPORT_GAS  
+
+// Run unit tests
+REPORT_GAS=true hh --network hardhat test  
+
 # Default project readme  
 # Advanced Sample Hardhat Project
 

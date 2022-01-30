@@ -8,7 +8,7 @@ let contract: MyToken;
 let owner : SignerWithAddress;
 let tokenDecimal : number;
 
-describe("MyToken Tests", function(){
+xdescribe("MyToken Tests", function(){
     this.timeout(180000);
 
     before(async () => {
