@@ -22,6 +22,7 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-
-
+      - name: CodeChecks
+        run: npx codechecks
+        env:
+          CC_SECRET: ${{ secrets.CC_SECRET }}
