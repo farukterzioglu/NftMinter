@@ -89,6 +89,9 @@ npx hardhat coverage
 // Use coverall  
 npm install --save-dev coveralls  
 
+// Use codechecks  
+npm install --save-dev @codechecks/client  
+
 
 # Default project readme  
 # Advanced Sample Hardhat Project

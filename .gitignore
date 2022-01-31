@@ -392,3 +392,5 @@ typechain
 #Hardhat files
 cache
 artifacts
+
+gasReporterOutput.json

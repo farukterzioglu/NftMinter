@@ -24,3 +24,9 @@ https://github.com/marketplace/actions/coveralls-github-action
 
 Code Coverage for Solidity  
 https://blog.colony.io/code-coverage-for-solidity-eecfa88668c2/  
+
+
+## Guide to using Codechecks
+Getting started  
+https://github.com/codechecks/docs/blob/master/getting-started.md#getting-started  
+https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/codechecks.md  
