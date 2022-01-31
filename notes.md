@@ -20,6 +20,7 @@ http://www.correccionesweb.com.ar/hardhat_vue/guides/vscode-tests.html
 ## Coverage
 https://www.npmjs.com/package/solidity-coverage  
 https://github.com/sc-forks/solidity-coverage/blob/master/docs/advanced.md#skipping-tests  
+https://github.com/marketplace/actions/coveralls-github-action  
 
 Code Coverage for Solidity  
 https://blog.colony.io/code-coverage-for-solidity-eecfa88668c2/  

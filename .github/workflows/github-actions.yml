@@ -14,10 +14,14 @@ jobs:
       - run: npm install
       - run: npm install --save-dev hardhat
       - run: npx hardhat compile
-      - name: runtests
-        run: npx hardhat --network hardhat test
-      - name: coverage
-        run: npx hardhat --network hardhat coverage
+      - name: Test
+        run: npx hardhat test
+      - name: Coverage
+        run: npx hardhat coverage
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
 
 

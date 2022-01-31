@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/farukterzioglu/NftMinter/badge.svg?branch=main)](https://coveralls.io/github/farukterzioglu/NftMinter?branch=main)  
+
 git init  
 npm init  
 npm install --save-dev hardhat  
@@ -79,6 +81,14 @@ REPORT_GAS
 
 // Run unit tests
 REPORT_GAS=true hh --network hardhat test  
+
+// User coverage  
+npm install --save-dev solidity-coverage  
+npx hardhat coverage  
+
+// Use coverall  
+npm install --save-dev coveralls  
+
 
 # Default project readme  
 # Advanced Sample Hardhat Project
