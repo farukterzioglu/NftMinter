@@ -49,7 +49,7 @@ describe("MyNft Unit Tests", function () {
 
     const tokenUri = await contract.tokenURI(tokenId);
 
-    expect(tokenUri).to.equal(`http://ipfs/subpath/123-${tokenId}`);
+    expect(tokenUri).to.equal(`://ipfs/subpath/123-${tokenId}`);
   }).timeout(60000);
 
   it("Should return the URI when baseURI updated", async function () {
