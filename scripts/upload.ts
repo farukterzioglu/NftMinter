@@ -13,9 +13,9 @@ const remoteClient = create( {
   }
 })
 
-const ipfsClient = create( { 
-  url: "http://127.0.0.1:5001"
-})
+// const ipfsClient = create( { 
+//   url: "http://127.0.0.1:5001"
+// })
 
 class FileUploadResponse
 {
@@ -39,7 +39,7 @@ const globSourceOptions = { hidden: false };
 
 async function uploadFolderToIpfs(folderPath :string) : Promise<FileUploadResponse> {
   const uploadDetails = new FileUploadResponse();
-  for await (const file of ipfsClient.addAll(globSource(folderPath, "**/*", globSourceOptions), addOptions)) {
+  for await (const file of remoteClient.addAll(globSource(folderPath, "**/*", globSourceOptions), addOptions)) {
     console.log( {image: file});
     uploadDetails.FileNames.push(file.path);
     uploadDetails.FolderCid = file.cid.toString();
@@ -82,7 +82,7 @@ async function uploadMetadataListToIpfs(metadataList : Metadata[]) : Promise<Met
   // TODO: Upload with file name (e.g. `baseuri/1.json` )
   const metadataUploadResponse = new MetadataUploadResponse();
   let i: number = 0;
-  for await (const file of ipfsClient.addAll(jsonList, addOptions)) {
+  for await (const file of remoteClient.addAll(jsonList, addOptions)) {
     // Last item is the folder CID
     if(i == (metadataList.length) )
     {
@@ -151,17 +151,17 @@ async function main() {
   const fileNameMetadataPairs = await uploadNftImages("files/nftimages", baseUrl);
   // fileNameMetadataPairs.forEach(fileNameMetadataPair => { console.log(`${fileNameMetadataPair.fileName} \t ${fileNameMetadataPair.metaDataUri}`); });
 
-  const GenericNft = await ethers.getContractFactory("GenericNft");
-  const genericNft = await GenericNft.deploy("MatrixPosters", "MTRX", "ipfs://");
-  await genericNft.deployed();
+  const MyNft = await ethers.getContractFactory("MyNft");
+  const myNft = await MyNft.deploy("MatrixPosters", "MTRX", "ipfs://");
+  await myNft.deployed();
 
-  console.log(`Nft deployed to: ${genericNft.address}`);
+  console.log(`Nft deployed to: ${myNft.address}`);
 
   const [owner] = await ethers.getSigners();
   for (let i = 0; i < fileNameMetadataPairs.length; i++) {
     const element = fileNameMetadataPairs[i];
     
-    const mintTx = await genericNft.safeMintWithUri(owner.address, i, element.metaDataUri);
+    const mintTx = await myNft.safeMintWithUri(owner.address, i, element.metaDataUri);
     console.log(`Minted ${element.fileName} at tx ${mintTx.hash}`);
   }
 }
