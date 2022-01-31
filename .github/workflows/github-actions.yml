@@ -16,6 +16,8 @@ jobs:
       - run: npx hardhat compile
       - name: runtests
         run: npx hardhat --network hardhat test
+      - name: coverage
+        run: npx hardhat --network hardhat coverage
 
 
 

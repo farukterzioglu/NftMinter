@@ -8,5 +8,18 @@ Act
 Run your GitHub Actions locally
 https://github.com/nektos/act  
 
+## Smart contract testing 
+
+### Chai matchers
+https://ethereum-waffle.readthedocs.io/en/latest/matchers.html  
+
+### Running tests on Visual Studio Code
+http://www.correccionesweb.com.ar/hardhat_vue/guides/vscode-tests.html  
 
 
+## Coverage
+https://www.npmjs.com/package/solidity-coverage  
+https://github.com/sc-forks/solidity-coverage/blob/master/docs/advanced.md#skipping-tests  
+
+Code Coverage for Solidity  
+https://blog.colony.io/code-coverage-for-solidity-eecfa88668c2/  

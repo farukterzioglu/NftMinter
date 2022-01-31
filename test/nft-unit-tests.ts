@@ -25,7 +25,7 @@ describe("MyNft Unit Tests", function () {
     expect(tokenUri).to.equal("http://ipfs/1");
   }).timeout(60000);
 
-  it("Should match the used gas", async function () {
+  it("Should match the used gas [ @skip-on-coverage ]", async function () {
     const estimation = await contract.estimateGas.safeMint("0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f", 2);
     expect(estimation.toNumber()).to.lessThanOrEqual(152034);
   }).timeout(60000);
