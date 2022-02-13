@@ -30,3 +30,7 @@ https://blog.colony.io/code-coverage-for-solidity-eecfa88668c2/
 Getting started  
 https://github.com/codechecks/docs/blob/master/getting-started.md#getting-started  
 https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/codechecks.md  
+
+Test smart contracts like a rockstar  
+https://forum.openzeppelin.com/t/test-smart-contracts-like-a-rockstar/1001  
+https://betterprogramming.pub/a-few-tips-for-unit-testing-ethereum-smart-contract-in-solidity-d804062068fb  

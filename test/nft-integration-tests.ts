@@ -4,7 +4,7 @@ import { MyNft } from "../typechain";
 
 let contract: MyNft;
 
-xdescribe("MyNft", function () {
+xdescribe("MyNft Integration Tests", function () {
   before(async () => {  
     if(process.env.CONTRACT_HASH == null) {
       console.log("env.CONTRACT_HASH is not set, by passing MyNft test.");

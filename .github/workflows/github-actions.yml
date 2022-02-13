@@ -21,7 +21,28 @@ jobs:
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
+          path-to-lcov: coverage/lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: CodeChecks
+        run: npx codechecks
+        env:
+          CC_SECRET: ${{ secrets.CC_SECRET }}
+  Live-Prep:
+    runs-on: ubuntu-latest
+    env:
+      REPORT_GAS: true
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - run: npm install
+      - run: npm install --save-dev hardhat
+      - run: npx hardhat compile
+      - name: Test on Ganache
+        run: npx hardhat test --network ganache
+      - name: Test on Ropsten
+        run: npx hardhat test --network ropsten
       - name: CodeChecks
         run: npx codechecks
         env:
