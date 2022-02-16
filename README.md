@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/github/farukterzioglu/NftMinter/badge.svg?branch=main)](https://coveralls.io/github/farukterzioglu/NftMinter?branch=main) [![Unit Test For NFTs](https://github.com/farukterzioglu/NftMinter/actions/workflows/github-actions.yml/badge.svg)](https://github.com/farukterzioglu/NftMinter/actions/workflows/github-actions.yml)
+[![Coverage Status](https://coveralls.io/repos/github/farukterzioglu/NftMinter/badge.svg?branch=master)](https://coveralls.io/github/farukterzioglu/NftMinter?branch=master) [![Unit Test For NFTs](https://github.com/farukterzioglu/NftMinter/actions/workflows/github-actions.yml/badge.svg)](https://github.com/farukterzioglu/NftMinter/actions/workflows/github-actions.yml)
 
 git init  
 npm init  

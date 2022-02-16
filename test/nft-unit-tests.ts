@@ -1,6 +1,7 @@
 import { expect } from "chai";
+import { BigNumber } from "ethers";
 import { ethers } from "hardhat";
-import { MyNft } from "../typechain";
+import { MyNft, ExposedMyNft } from "../typechain";
 
 let contract: MyNft;
 
@@ -197,5 +198,49 @@ describe('Pausable',  () => {
         });
       });
     });
+  });
+});
+
+describe('Burnable',  () => {
+  let exposedContract: ExposedMyNft;
+
+  beforeEach(async function () {
+    const Contract = await ethers.getContractFactory("ExposedMyNft");
+    exposedContract = await Contract.deploy();
+    await exposedContract.deployed();
+  });
+
+  it('should destry the token', async function () {
+    const tokenId = 1;
+    const address = "0xFe0Cbd2526340F49Ce414a84e7F7E9621669063f";
+  
+    const mintTx = await exposedContract.safeMint(address, tokenId);
+    await mintTx.wait();
+    
+    let balance = await exposedContract.balanceOf(address);
+    expect(balance).to.be.equal(BigNumber.from(1));
+
+    const burnTx = await exposedContract.burn(tokenId);
+    await burnTx.wait();
+
+    balance = await exposedContract.balanceOf(address);
+    expect(balance).to.be.equal(BigNumber.from(0));
+  });
+});
+
+describe('SupportsInterface',  () => {
+  before(async function () {
+    const Contract = await ethers.getContractFactory("MyNft");
+    contract = await Contract.deploy("MyNft", "MyN", "http://ipfs/");
+    await contract.deployed();
+  });
+
+  it('should support ERC721, ERC721, ERC721Enumerable', async function () {
+    // ERC721 0x80ac58cd
+    // ERC721 0x5b5e139f
+    // ERC721Enumerable 0x780e9d63
+    expect(await contract.supportsInterface("0x80ac58cd")).to.be.true;
+    expect(await contract.supportsInterface("0x5b5e139f")).to.be.true;
+    expect(await contract.supportsInterface("0x780e9d63")).to.be.true;
   });
 });

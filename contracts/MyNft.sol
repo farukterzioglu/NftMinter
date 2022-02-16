@@ -80,3 +80,11 @@ contract MyNft is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable 
         return super.supportsInterface(interfaceId);
     }
 }
+
+contract ExposedMyNft is MyNft {
+    constructor() MyNft("Exposed", "EXP", "") {}
+
+    function burn(uint256 tokenId) public {
+        return _burn(tokenId);
+    }
+}

@@ -10,6 +10,9 @@ https://github.com/nektos/act
 
 ## Smart contract testing 
 
+Solidity: Unit testing internal functions  
+https://medium.com/@danielque/solidity-unit-testing-internal-functions-4e9a728298a0  
+
 ### Chai matchers
 https://ethereum-waffle.readthedocs.io/en/latest/matchers.html  
 
